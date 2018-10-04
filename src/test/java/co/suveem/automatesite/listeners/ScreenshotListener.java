@@ -17,9 +17,8 @@ import org.testng.ITestResult;
 import co.suveem.automatesite.drivermanager.DriverManager;
 import co.suveem.automatesite.utils.Utils;
 
-public class ListenerScreenshot implements ITestListener{
-	WebDriver driver = DriverManager.getDriverInstance();
-	
+public class ScreenshotListener implements ITestListener{
+
 	@Override
 	public void onTestStart(ITestResult result) {
 		// TODO Auto-generated method stub
@@ -34,9 +33,9 @@ public class ListenerScreenshot implements ITestListener{
 
 	@Override
 	public void onTestFailure(ITestResult result) {
-		Path pathScreenshot = Paths.get("target","screenshot");
+		WebDriver driver = DriverManager.getDriverInstance();
 		File screenshot = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-		
+		Path pathScreenshot = Paths.get("target","screenshot");
 		try {
 			Files.createDirectories(pathScreenshot.toAbsolutePath());
 			FileUtils.copyFile(screenshot,new File(pathScreenshot.toString()+"/" + Utils.getFileName(result.getName())));
@@ -45,6 +44,7 @@ public class ListenerScreenshot implements ITestListener{
 			e.printStackTrace();
 		}
 	}
+		
 
 	@Override
 	public void onTestSkipped(ITestResult result) {
